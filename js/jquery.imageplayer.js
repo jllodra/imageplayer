@@ -181,9 +181,9 @@
                 clearTimeout(rotator); 
                 scrubber_handle.stop(true, true);
             }
-            if(i<images.length) { // Play image.                
+            if(i<images.length) { // Play image and reset scrubber position as-needed.                
                if(i===0 && parseFloat(scrubber_handle.css('left')) > incriment) scrubber_handle.css('left', '0');
-                image_transition(images[i]);
+               image_transition(images[i]);
             }
             i++; // Next image.
         }
