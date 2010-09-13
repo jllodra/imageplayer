@@ -128,11 +128,12 @@
                 stage.html(image);
                 if(widths[i] > settings.stageWidth) {
                     ratio = settings.stageWidth / widths[i];
+                    heights[i] = heights[i]*ratio;
                     dimensions = {
                         width:settings.stageWidth,
-                        height:heights[i]*ratio
+                        height:heights[i],
+                        'margin-top':settings.stageHeight/2 - heights[i]/2
                     }
-                    heights[i] = heights[i]*ratio;
                     image.css(dimensions).attr(dimensions);
                 }
             
