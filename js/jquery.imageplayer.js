@@ -2,6 +2,7 @@
     $.fn.imagePlayer = function(options) {
     
         var rotator = null;
+        var clicked = false;
     
     	var settings = $.extend( {
     		stageWidth:400,
@@ -76,11 +77,18 @@
         });
         
         function handle_image_hover(e, elem) {
-            if(settings.pauseOnHover===true && play_pause.attr('class') === 'pause') handle_control_click(e, '.controls a');
+            if(clicked !== true &&settings.pauseOnHover===true && play_pause.attr('class') === 'pause') {
+                play_pause.attr('class', 'play');
+                clearTimeout(rotator);
+                scrubber_handle.stop(true, true);
+            }
         }
         
         function handle_image_out(e, elem) {
-            if(settings.pauseOnHover===true && play_pause.attr('class') === 'play') handle_control_click(e, '.controls a');
+            if(clicked !== true && settings.pauseOnHover===true && play_pause.attr('class') === 'play') {
+                play_pause.attr('class', 'pause');
+                image_cycle();
+            }
         }
         
         function handle_control_click(e, elem) {
@@ -90,11 +98,13 @@
             // hasClass is buggy here for some reason...
             if(elem.attr('class') == 'play') {
                 elem.attr('class', 'pause');
+                clicked=false;
                 image_cycle();
             } else {
                 elem.attr('class', 'play');
                 clearTimeout(rotator);
                 scrubber_handle.stop(true, true);
+                clicked=true;
             }
         }
         
