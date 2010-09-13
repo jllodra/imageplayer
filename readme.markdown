@@ -1,9 +1,9 @@
 jQuery Image Player
 ===================
 
-I wanted an image player/slideshow that looked and functioned similarly to a video player. After some playing around, this was the result. You can click different points on the scrubber to jump back and forth within the slideshow, and hovering over the image will pause the show. Of course, you can also use the play/pause button.
+I wanted an image player/slideshow that looked and functioned similarly to a video player. After some playing around, this was the result. You can click different points on the scrubber to jump back and forth within the slideshow, and hovering over the image will pause the show. Of course, you can also use the play/pause button. Images that are larger than the stage will automatically be scaled to fit.
 
-I had intended to add support for dragging the scrubber, but I haven't gotten to it yet. I also plan to add automatic image resizing at some point, so large images will be scaled down to fit inside the stage. As it is now, they're simply clipped.
+I had intended to add support for dragging the scrubber, but I haven't gotten to it yet. As it is now, they're simply clipped. Scrubber animation isn't perfect yet, but it's a good start, I think.
 
 Example:
 --------

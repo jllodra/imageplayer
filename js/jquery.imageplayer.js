@@ -20,8 +20,14 @@
             player_id = this.id;
             
             // Get a list of images inside the player.
-            images = [];
-            playlist.find('img').each(function() { images.push(this.src) });
+            images  = [];
+            widths  = [];
+            heights = [];
+            playlist.find('img').each(function() {
+                images.push(this.src)
+                widths.push($(this).width());
+                heights.push($(this).height());
+            });
             
             // Player elements.
             player          = $('<div>').addClass('img_player');
@@ -120,6 +126,24 @@
                     alt:'Side '+i+1
                 });
                 stage.html(image);
+                if(widths[i] > settings.stageWidth) {
+                    ratio = settings.stageWidth / widths[i];
+                    dimensions = {
+                        width:settings.stageWidth,
+                        height:heights[i]*ratio
+                    }
+                    heights[i] = heights[i]*ratio;
+                    image.css(dimensions).attr(dimensions);
+                }
+            
+                if(heights[i] > settings.stageHeight){
+                    ratio = settings.stageHeight / heights[i];
+                    dimensions = {
+                        width:widths[i]*ratio,
+                        height:settings.stageHeight
+                    }
+                    image.css(dimensions).attr(dimensions);
+                }
                 stage.fadeIn(settings.transition, function() {
                     rotator = setTimeout(image_cycle, settings.delay*1000);
                 });
