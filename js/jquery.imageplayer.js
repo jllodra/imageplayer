@@ -9,7 +9,8 @@
     		autoStart:true,
     		pauseOnHover:true,
     		delay:5,
-    		transition:'slow'
+    		transition:'slow',
+    		loop:true
     		},options);
     
         $(this).each(function() {
@@ -128,9 +129,16 @@
         function image_cycle() {
             clearTimeout(rotator);
             if(typeof i == "undefined") i=0;
-            if(i > images.length-1) i=0;
-            if(i===0 && parseFloat(scrubber_handle.css('left')) > incriment) scrubber_handle.css('left', '0');
-            image_transition(images[i]);
+            if(settings.loop===true) {
+                if(i > images.length-1) i=0;
+            } else {
+                clearTimeout(rotator);
+                scrubber_handle.stop(true, true);
+            }
+            if(i<images.length) {                 
+               if(i===0 && parseFloat(scrubber_handle.css('left')) > incriment) scrubber_handle.css('left', '0');
+                image_transition(images[i]);
+            }
             i++;
         }
     }
