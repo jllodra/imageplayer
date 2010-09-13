@@ -65,7 +65,7 @@
             // Build the player.
             player.append(stage).append(controls.append(play_pause).append(scrubber.append(scrubber_handle)));
             
-            playlist.after(player).remove();
+            playlist.hide().after(player);
             
             // Scrubber incriments for image switching.
             incriment = Math.floor(scrubber.width() / images.length);
