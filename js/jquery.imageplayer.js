@@ -76,16 +76,16 @@
         });
         
         function handle_image_hover(e, elem) {
-            if(settings.pauseOnHover===true && play_pause.attr('class') === 'pause') handle_control_click(e, play_pause);
+            if(settings.pauseOnHover===true && play_pause.attr('class') === 'pause') handle_control_click(e, '.controls a');
         }
         
         function handle_image_out(e, elem) {
-            if(settings.pauseOnHover===true && play_pause.attr('class') === 'play') handle_control_click(e, play_pause);
+            if(settings.pauseOnHover===true && play_pause.attr('class') === 'play') handle_control_click(e, '.controls a');
         }
         
         function handle_control_click(e, elem) {
             e.preventDefault();
-            elem = $(elem);
+            elem = $(elem, player);
 
             // hasClass is buggy here for some reason...
             if(elem.attr('class') == 'play') {
