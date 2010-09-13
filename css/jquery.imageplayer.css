@@ -1,0 +1,52 @@
+.img_player {
+    background:#333;
+    border:1px solid #000;
+    padding:10px;
+}
+
+.img_player .stage {
+    margin:0 auto 0 auto;
+    background:#333;
+    overflow:hidden;
+    text-align:center;
+}
+
+.img_player .controls {
+    height:40px;
+    margin-top:10px;
+    background:url(../images/player.png) 0 -120px repeat-x;
+}
+
+.img_player .controls a {
+    text-decoration:none;
+    outline:none;
+    text-indent:-9999px;
+    display:block;
+    float:left;
+    width:40px;
+    height:40px;
+}
+
+.img_player a.play  { background:url(../images/player.png) 0 0 no-repeat; }
+.img_player a.pause { background:url(../images/player.png) 0 -40px no-repeat; }
+
+.img_player .scrubber {
+    float:left;
+    height:40px;
+    background:url(../images/player.png) 0 -80px repeat-x;
+}
+
+.img_player .scrubber a {
+    display:block;
+    position:relative;
+    top:50%;
+    left:0;
+    margin:-6px 0 0 0;
+    width:8px;
+    height:12px;
+    overflow:hidden;
+    text-decoration:none;
+    text-indent:-9999px;
+    outline:none;
+    background:url(../images/player.png) 0 -160px no-repeat;
+}
