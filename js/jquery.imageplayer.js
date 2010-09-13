@@ -118,6 +118,8 @@
             x_coord = Math.ceil(e.pageX - pos.left);
             scrubber_handle.css('left', x_coord + 'px');
             i = Math.floor(x_coord / incriment);
+            play_pause.attr('class', 'pause');
+            clicked=false;
             image_cycle();
 
         }
