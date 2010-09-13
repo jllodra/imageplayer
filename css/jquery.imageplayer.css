@@ -15,6 +15,7 @@
     height:40px;
     margin-top:10px;
     background:url(../images/player.png) 0 -120px repeat-x;
+    overflow:hidden;
 }
 
 .img_player .controls a {

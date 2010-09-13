@@ -22,7 +22,8 @@ Example:
           autoStart:true,
           pauseOnHover:true,
           delay:5,
-          transition:'slow'
+          transition:'slow',
+          loop:true
         };
         $('#image_player').imagePlayer(options);
       });
