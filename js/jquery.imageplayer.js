@@ -80,7 +80,7 @@
         }
         
         function handle_image_out(e, elem) {
-            if(settings.pauseOnHover===true play_pause.attr('class') === 'play') play_pause.click();
+            if(settings.pauseOnHover===true && play_pause.attr('class') === 'play') play_pause.click();
         }
         
         function handle_control_click(e, elem) {
