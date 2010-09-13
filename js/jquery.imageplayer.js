@@ -76,11 +76,11 @@
         });
         
         function handle_image_hover(e, elem) {
-            if(settings.pauseOnHover===true && play_pause.attr('class') === 'pause') play_pause.click();
+            if(settings.pauseOnHover===true && play_pause.attr('class') === 'pause') handle_control_click(e, play_pause);
         }
         
         function handle_image_out(e, elem) {
-            if(settings.pauseOnHover===true && play_pause.attr('class') === 'play') play_pause.click();
+            if(settings.pauseOnHover===true && play_pause.attr('class') === 'play') handle_control_click(e, play_pause);
         }
         
         function handle_control_click(e, elem) {
