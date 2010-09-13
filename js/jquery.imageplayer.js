@@ -63,7 +63,7 @@
             else play_pause.addClass('play');
     
             // Bind mouse interactions
-            stage.bind('mouseover', function(e) { handle_image_hover(e, this) }).bind('mouseout', function(e) { handle_image_out(e, this) });
+            stage.bind('mouseenter', function(e) { handle_image_hover(e, this) }).bind('mouseleave', function(e) { handle_image_out(e, this) }); // .hover seems not tow work?
             play_pause.bind('click', function(e) { handle_control_click(e, this) });
             scrubber.bind('click', function(e) { handle_scrubber_click(e, this) });
     
