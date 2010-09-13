@@ -76,12 +76,11 @@
         });
         
         function handle_image_hover(e, elem) {
-            clearTimeout(rotator);
-            scrubber_handle.stop(true, true);
+            if(play_pause.attr('class') == 'pause') play_pause.click();
         }
         
         function handle_image_out(e, elem) {
-            rotator = setTimeout(image_cycle, settings.delay*1000);
+            if(play_pause.attr('class') == 'play') play_pause.click();
         }
         
         function handle_control_click(e, elem) {
