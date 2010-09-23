@@ -14,7 +14,7 @@ Example:
       <li><img src="./images/photos/sample3.png"></li>
     </ul>
     
-    <script type="text/javascript" src="js/jquery.lumen.js">
+    <script type="text/javascript" src="js/jquery.imageplayer.js">
       $(function() {
         var options = {
           stageWidth:400,

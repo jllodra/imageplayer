@@ -79,59 +79,6 @@
             if(settings.autoStart === true) image_cycle();
         });
         
-        // When we hover over an image on the stage, pause if
-        // set to do so.
-        function handle_image_hover(e, elem) {
-            if(clicked !== true &&settings.pauseOnHover===true && play_pause.attr('class') === 'pause') {
-                play_pause.attr('class', 'play');
-                clearTimeout(rotator);
-                scrubber_handle.stop(true, true);
-            }
-        }
-        // Resume on mouseout, if playback wasn't manually paused
-        function handle_image_out(e, elem) {
-            if(clicked !== true && settings.pauseOnHover===true && play_pause.attr('class') === 'play') {
-                play_pause.attr('class', 'pause');
-                image_cycle();
-            }
-        }
-        // Clicking the play/pause button
-        function handle_control_click(e, elem) {
-            e.preventDefault();
-            elem = $(elem, player);
-
-            // hasClass is buggy here for some reason...
-            if(elem.attr('class') == 'play') { // play
-                elem.attr('class', 'pause');
-                clicked=false;
-                image_cycle();
-            } else { // pause
-                elem.attr('class', 'play');
-                clearTimeout(rotator);
-                scrubber_handle.stop(true, true);
-                clicked=true;
-            }
-        }
-        // Clicking the scrubber bat jumps around in the playback
-        // timeline, just as you'd expect.
-        function handle_scrubber_click(e, elem) {
-            e.preventDefault();
-            elem = $(elem);
-            clearTimeout(rotator);  // Stop all playback,
-            scrubber_handle.stop(); // and animation.
-            
-            // Set new scrubber position.
-            pos = elem.offset();
-            x_coord = Math.ceil(e.pageX - pos.left);
-            scrubber_handle.css('left', x_coord + 'px');
-            i = Math.floor(x_coord / incriment);
-            // Resume playback.
-            play_pause.attr('class', 'pause');
-            clicked=false;
-            image_cycle();
-
-        }
-        
         function image_transition(img) {
             clearTimeout(rotator);
             stage.fadeOut(settings.transition, function() {
@@ -187,5 +134,59 @@
             }
             i++; // Next image.
         }
+
+        // When we hover over an image on the stage, pause if
+        // set to do so.
+        function handle_image_hover(e, elem) {
+            if(clicked !== true && settings.pauseOnHover===true && play_pause.attr('class') === 'pause') {
+                play_pause.attr('class', 'play');
+                clearTimeout(rotator);
+                scrubber_handle.stop(true, true);
+            }
+        }
+        // Resume on mouseout, if playback wasn't manually paused
+        function handle_image_out(e, elem) {
+            if(clicked !== true && settings.pauseOnHover===true && play_pause.attr('class') === 'play') {
+                play_pause.attr('class', 'pause');
+                image_cycle();
+            }
+        }
+        // Clicking the play/pause button
+        function handle_control_click(e, elem) {
+            e.preventDefault();
+            elem = $(elem, player);
+
+            // hasClass is buggy here for some reason...
+            if(elem.attr('class') == 'play') { // play
+                elem.attr('class', 'pause');
+                clicked=false;
+                image_cycle();
+            } else { // pause
+                elem.attr('class', 'play');
+                clearTimeout(rotator);
+                scrubber_handle.stop(true, true);
+                clicked=true;
+            }
+        }
+        // Clicking the scrubber bar jumps around in the playback
+        // timeline, just as you'd expect.
+        function handle_scrubber_click(e, elem) {
+            e.preventDefault();
+            elem = $(elem);
+            clearTimeout(rotator);  // Stop all playback,
+            scrubber_handle.stop(); // and animation.
+            
+            // Set new scrubber position.
+            pos = elem.offset();
+            x_coord = Math.ceil(e.pageX - pos.left);
+            scrubber_handle.css('left', x_coord + 'px');
+            i = Math.floor(x_coord / incriment);
+            // Resume playback.
+            play_pause.attr('class', 'pause');
+            clicked=false;
+            image_cycle();
+
+        }
+        
     }
 })(jQuery);
