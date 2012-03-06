@@ -1,18 +1,19 @@
-;(function($) {
+;
+(function($) {
     $.fn.imagePlayer = function(options) {
     
         var rotator = null;
         var clicked = false;
     
-    	var settings = $.extend( {
-    		stageWidth:400,
-    		stageHeight:300,
-    		autoStart:true,
-    		pauseOnHover:true,
-    		delay:5,
-    		transition:'slow', // can be 'slow', 'fast' or time in ms.
-    		loop:true
-    		},options);
+        var settings = $.extend( {
+            stageWidth:400,
+            stageHeight:300,
+            autoStart:true,
+            pauseOnHover:true,
+            delay:1,
+            transition:0, // can be 'slow', 'fast' or time in ms.
+            loop:true
+        },options);
     
         $(this).each(function() {
         
@@ -63,9 +64,17 @@
             else play_pause.addClass('play');
     
             // Bind mouse interactions
-            stage.bind('mouseenter', function(e) { handle_image_hover(e, this) }).bind('mouseleave', function(e) { handle_image_out(e, this) }); // .hover seems not tow work?
-            play_pause.bind('click', function(e) { handle_control_click(e, this) });
-            scrubber.bind('click', function(e) { handle_scrubber_click(e, this) });
+            stage.bind('mouseenter', function(e) {
+                handle_image_hover(e, this)
+            }).bind('mouseleave', function(e) {
+                handle_image_out(e, this)
+            }); // .hover seems not tow work?
+            play_pause.bind('click', function(e) {
+                handle_control_click(e, this)
+            });
+            scrubber.bind('click', function(e) {
+                handle_scrubber_click(e, this)
+            });
     
             // Build the player.
             player.append(stage).append(controls.append(play_pause).append(scrubber.append(scrubber_handle)));
@@ -80,13 +89,18 @@
         });
         
         function image_transition(img) {
-            clearTimeout(rotator);
+            clearTimeout(rotator); rotator = null;
             stage.fadeOut(settings.transition, function() {
-                max_left = incriment*i; // Scrubber range.
+                max_left = incriment*(i+1); // Scrubber range.
+                console.log(max_left);
                 current_left = parseFloat(scrubber_handle.css('left')); // Current position.
+                console.log(current_left);
                 remaining = max_left - current_left; // Distance from current position to destination for this image.
+                console.log(remaining);
                 percent = remaining/incriment; // What percentage is that?
-                scrubber_handle.animate({left:'+='+remaining+'px'}, settings.delay*(1000*percent)); // Set scrubber animaton.
+                scrubber_handle.animate({
+                    left:'+='+remaining+'px'
+                    }, (settings.delay)*(1000*percent)+settings.transition*2, 'linear'); // Set scrubber animaton.
                 image = $('<img>').attr({ // Image object.
                     src:img,
                     alt:'Slide '+i+1
@@ -123,14 +137,19 @@
         function image_cycle() {
             if(typeof i == "undefined") i=0; // Default location in timeline.
             if(settings.loop===true) { // Loop.
-                if(i > images.length-1) i=0;
+                if(i > images.length-1) { 
+                    i=0;
+                    scrubber_handle.css('left', '0');
+                    scrubber_handle.stop(true, true);
+                }
             } else { // Don't loop.
-                clearTimeout(rotator); 
+                clearTimeout(rotator); rotator = null;
                 scrubber_handle.stop(true, true);
             }
             if(i<images.length) { // Play image and reset scrubber position as-needed.                
-               if(i===0 && parseFloat(scrubber_handle.css('left')) > incriment) scrubber_handle.css('left', '0');
-               image_transition(images[i]);
+                if(i===0 && parseFloat(scrubber_handle.css('left')) > incriment) scrubber_handle.css('left', '0');
+                image_transition(images[i]);
+                console.log("Transition");
             }
             i++; // Next image.
         }
@@ -140,7 +159,7 @@
         function handle_image_hover(e, elem) {
             if(clicked !== true && settings.pauseOnHover===true && play_pause.attr('class') === 'pause') {
                 play_pause.attr('class', 'play');
-                clearTimeout(rotator);
+                clearTimeout(rotator); rotator = null;
                 scrubber_handle.stop(true, true);
             }
         }
@@ -163,7 +182,7 @@
                 image_cycle();
             } else { // pause
                 elem.attr('class', 'play');
-                clearTimeout(rotator);
+                clearTimeout(rotator); rotator = null;
                 scrubber_handle.stop(true, true);
                 clicked=true;
             }
@@ -171,22 +190,32 @@
         // Clicking the scrubber bar jumps around in the playback
         // timeline, just as you'd expect.
         function handle_scrubber_click(e, elem) {
+            var wasplaying = false;
             e.preventDefault();
             elem = $(elem);
-            clearTimeout(rotator);  // Stop all playback,
-            scrubber_handle.stop(); // and animation.
-            
+            if(rotator != null) {
+                wasplaying = true;
+                clearTimeout(rotator); rotator = null;// Stop all playback,
+                scrubber_handle.stop(); // and animation.
+            }
+            console.log(rotator);
             // Set new scrubber position.
             pos = elem.offset();
             x_coord = Math.ceil(e.pageX - pos.left);
             scrubber_handle.css('left', x_coord + 'px');
             i = Math.floor(x_coord / incriment);
-            // Resume playback.
-            play_pause.attr('class', 'pause');
-            clicked=false;
-            image_cycle();
-
+            // Resume playback if playing.
+            if(wasplaying) {
+                play_pause.attr('class', 'pause');
+                clicked=false;
+                image_cycle();
+            } else {
+                image = $('<img>').attr({ // Image object.
+                    src:images[i],
+                    alt:'Slide '+i+1
+                });
+                stage.html(image);
+            }
         }
-        
     }
 })(jQuery);
