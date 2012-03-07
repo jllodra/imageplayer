@@ -1,4 +1,5 @@
-;
+if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
+
 (function($) {
     $.fn.imagePlayer = function(options) {
     
@@ -17,7 +18,7 @@
             loop:true
         },options);
     
-        $(this).each(function() {
+        return $(this).each(function() {
         
             // Get playlist object, and its ID.
             playlist = $(this);
@@ -25,7 +26,7 @@
             
             // Get a list of images inside the player,
             // as well as their widths and height.
-            // This is probably not the msot efficient way to do it,
+            // This is probably not the most efficient way to do it,
             // but it doesn't rely on width/height being set in the
             // playlist HTML.
             images  = [];
@@ -62,8 +63,11 @@
             });
             
             // Set the right control for play/pause.
-            if(settings.autoStart===true) play_pause.addClass('pause');
-            else play_pause.addClass('play');
+            if(settings.autoStart===true) { 
+                play_pause.addClass('pause');
+            } else {
+                play_pause.addClass('play');
+            }
     
             // Bind mouse interactions
             stage.bind('mouseenter', function(e) {
@@ -167,17 +171,18 @@
         // set to do so.
         function handle_image_hover(e, elem) {
             if(clicked !== true && settings.pauseOnHover===true && play_pause.attr('class') === 'pause') {
-                play_pause.attr('class', 'play');
                 clearTimeout(rotator); rotator = null;
-                scrubber_handle.stop(true, true);
+                scrubber_handle.stop(true, true); // could set to false and reposition scrubber to frame
             }
         }
         // Resume on mouseout, if playback wasn't manually paused
         function handle_image_out(e, elem) {
-            if(clicked !== true && settings.pauseOnHover===true && play_pause.attr('class') === 'play') {
-                play_pause.attr('class', 'pause');
+            if(clicked !== true && settings.pauseOnHover===true && play_pause.attr('class') === 'pause') {            
                 image_cycle();
+            } else {
+                return;
             }
+            play_pause.attr('class', 'pause');
         }
         // Clicking the play/pause button
         function handle_control_click(e, elem) {
