@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <title>Image Player</title>
+        <link rel="stylesheet" href="./css/jquery.imageplayer.css">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <script type="text/javascript" src="./js/jquery.imageplayer.js"></script>
+        <style type="text/css">
+            body {
+                background:#333;
+                text-align:center;
+                margin:0;
+                padding:0;
+                font-family:arial, helvetica, sans-serif;
+                font-size:9pt;
+            }
+            #container {
+                width:850px;
+                padding:20px;
+                background:#fff;
+                margin:30px auto 0 auto;
+                text-align:left;
+                box-shadow: 0px 0px 300px #ccc;
+            }
+
+            #footer {
+                margin:20px 0 0 0;
+                padding:20px 0 0 0;
+                text-align:right;
+                color:#777;
+                border-top:1px solid #ccc;
+            }
+
+
+            h1 {
+                font-size:21pt;
+                padding-bottom:10px;
+                margin:0 0 10px 0;
+                border-bottom:1px solid #ccc;
+            }
+
+            h3 { font-size:12pt; }
+
+            a {
+                color:#d00;
+            }
+
+            a:hover { color:#fff; background-color:#333; }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <h1>ImagePlayer</h1>
+
+            <ul id="image_player">
+                <li><img src="./images/photos/sample1.png" /></li>
+                <li><img src="./images/photos/sample2.png" /></li>
+                <li><img src="./images/photos/sample3.png" /></li>
+                <li><img src="./images/photos/sample4.png" /></li>
+                <li><img src="./images/photos/sample5.png" /></li>
+                <li><img src="./images/photos/sample6.png" /></li>
+                <li><img src="./images/photos/sample7.png" /></li>
+                <li><img src="./images/photos/sample8.png" /></li>
+                <li><img src="./images/photos/sample9.png" /></li>
+                <li><img src="./images/photos/sample10.png" /></li>
+            </ul>
+
+        </div>
+
+        <script type="text/javascript">
+            $('#image_player').imagePlayer({
+                autoStart: false,
+                stageWidth:800,
+                stageHeight:600
+            });
+        </script>
+    </body>
+</html>

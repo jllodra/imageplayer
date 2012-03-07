@@ -110,7 +110,7 @@
                 });
                 stage.html(image); // Add to stage.
                 // Scale horizintally if image is too wide for stage.
-                if(widths[i] > settings.stageWidth) {
+                /*if(widths[i] > settings.stageWidth) {
                     ratio = settings.stageWidth / widths[i];
                     heights[i] = heights[i]*ratio;
                     dimensions = {
@@ -129,7 +129,11 @@
                         height:settings.stageHeight
                     }
                     image.css(dimensions).attr(dimensions);
-                }
+                }*/
+                
+                // I think the best solution is to adapt image source width and height to the stage width and height:
+                image.css({width: settings.stageWidth, height: settings.stageHeight}).attr({width: settings.stageWidth, height: settings.stageHeight});
+                
                 // Show the stage and re-start the cycle.
                 stage.fadeIn(settings.transition, function() {
                     rotator = setTimeout(image_cycle, settings.delay*1000);
@@ -237,6 +241,7 @@
                     src:images[i],
                     alt:'Slide '+i+1
                 });
+                image.css({width: settings.stageWidth, height: settings.stageHeight}).attr({width: settings.stageWidth, height: settings.stageHeight});
                 stage.html(image);
             }
         }
