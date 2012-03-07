@@ -4,11 +4,13 @@
     
         var rotator = null;
         var clicked = false;
+        
+        var last_scrubber_pos = 0;
     
         var settings = $.extend( {
             stageWidth:400,
             stageHeight:300,
-            autoStart:true,
+            autoStart:false,
             pauseOnHover:true,
             delay:1,
             transition:0, // can be 'slow', 'fast' or time in ms.
@@ -30,7 +32,7 @@
             widths  = [];
             heights = [];
             playlist.find('img').each(function() {
-                images.push(this.src)
+                images.push(this.src);
                 widths.push($(this).width());
                 heights.push($(this).height());
             });
@@ -82,7 +84,7 @@
             playlist.hide().after(player);
             
             // Scrubber incriments for image switching.
-            incriment = Math.floor(scrubber.width() / images.length);
+            inc = Math.floor(scrubber.width() / images.length);
            
             // Start cycling images.
             if(settings.autoStart === true) image_cycle();
@@ -91,13 +93,14 @@
         function image_transition(img) {
             clearTimeout(rotator); rotator = null;
             stage.fadeOut(settings.transition, function() {
-                max_left = incriment*(i+1); // Scrubber range.
+                max_left = inc*(i+1); // Scrubber range.
                 console.log(max_left);
                 current_left = parseFloat(scrubber_handle.css('left')); // Current position.
+                last_scrubber_pos = current_left;
                 console.log(current_left);
                 remaining = max_left - current_left; // Distance from current position to destination for this image.
                 console.log(remaining);
-                percent = remaining/incriment; // What percentage is that?
+                percent = remaining/inc; // What percentage is that?
                 scrubber_handle.animate({
                     left:'+='+remaining+'px'
                     }, (settings.delay)*(1000*percent)+settings.transition*2, 'linear'); // Set scrubber animaton.
@@ -146,8 +149,10 @@
                 clearTimeout(rotator); rotator = null;
                 scrubber_handle.stop(true, true);
             }
-            if(i<images.length) { // Play image and reset scrubber position as-needed.                
-                if(i===0 && parseFloat(scrubber_handle.css('left')) > incriment) scrubber_handle.css('left', '0');
+            if(i<images.length) { // Play image and reset scrubber position as-needed.   
+                if(i===0 && parseFloat(scrubber_handle.css('left')) > inc) {
+                    scrubber_handle.css('left', '0');
+                }
                 image_transition(images[i]);
                 console.log("Transition");
             }
@@ -183,7 +188,9 @@
             } else { // pause
                 elem.attr('class', 'play');
                 clearTimeout(rotator); rotator = null;
-                scrubber_handle.stop(true, true);
+                scrubber_handle.stop(true, false); // do not jump to end
+                scrubber_handle.css('left', last_scrubber_pos + 'px');
+                i--;
                 clicked=true;
             }
         }
@@ -202,8 +209,24 @@
             // Set new scrubber position.
             pos = elem.offset();
             x_coord = Math.ceil(e.pageX - pos.left);
-            scrubber_handle.css('left', x_coord + 'px');
-            i = Math.floor(x_coord / incriment);
+            console.log("x_coord: " + x_coord);
+            
+            
+            i = Math.floor(x_coord / inc);
+            console.log("i: "+ i);
+            console.log("inc*i: " + inc*(i)); // Start of frame
+            console.log("inc*i+1: " + inc*(i+1)); // Start of next frame
+            // Decide which frame is nearer
+            var delta_c = Math.abs(inc*i - x_coord);
+            var delta_n = Math.abs(inc*(i+1) - x_coord);
+            if(delta_c <= delta_n) { 
+                scrubber_handle.css('left', (x_coord - delta_c) + 'px');
+            } else {
+                scrubber_handle.css('left', (x_coord + delta_n) + 'px');
+                if(i < images.length-1) {
+                    i++;
+                }
+            }
             // Resume playback if playing.
             if(wasplaying) {
                 play_pause.attr('class', 'pause');
