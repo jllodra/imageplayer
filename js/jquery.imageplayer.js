@@ -95,13 +95,11 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         }
         
         function image_cycle() {
-            console.log(i);
             clearTimeout(rotator);
             if(settings.loop === true) {
                 if (i > images.length - 1) {
                     i = 0;
                     // stop animation
-                    console.log("I'm here");
                     scrubber_handle.stop(true, true);
                     scrubber_handle.css('left', '0');
                 }

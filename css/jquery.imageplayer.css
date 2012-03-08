@@ -23,6 +23,7 @@
     margin-top:10px;
     background:url(../images/player.png) 0 -120px repeat-x;
     overflow:hidden;
+    border-radius: 0px 0px 15px 15px;
 }
 
 .img_player .controls a {
