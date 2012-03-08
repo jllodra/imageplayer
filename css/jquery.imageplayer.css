@@ -32,15 +32,18 @@
     text-indent:-9999px;
     display:block;
     float:left;
-    width:40px;
+    width:35px;
     height:40px;
 }
 
 .img_player a.play  { background:url(../images/player.png) 0 0 no-repeat; }
 .img_player a.pause { background:url(../images/player.png) 0 -40px no-repeat; }
+.img_player a.start { background:url(../images/player.png) 0 -212px no-repeat; }
+.img_player a.end   { background:url(../images/player.png) 0 -172px no-repeat; }
 
 .img_player .scrubber {
     float:left;
+    margin-left: 10px;
     height:40px;
     background:url(../images/player.png) 0 -80px repeat-x;
 }
