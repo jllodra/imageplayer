@@ -171,12 +171,13 @@
         function handle_image_hover(e, elem) {
             if(clicked !== true && settings.pauseOnHover===true && play_pause.attr('class') === 'pause') {
                 clearTimeout(rotator); rotator = null;
-                scrubber_handle.stop(true, true); // could set to false and reposition scrubber to frame
             }
         }
         // Resume on mouseout, if playback wasn't manually paused
         function handle_image_out(e, elem) {
             if(clicked !== true && settings.pauseOnHover===true && play_pause.attr('class') === 'pause') {            
+                                scrubber_handle.stop(true, true); // could set to false and reposition scrubber to frame
+
                 image_cycle();
             } else {
                 return;

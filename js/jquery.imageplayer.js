@@ -16,16 +16,17 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
     $.imagePlayer = function (self, options) {
         var playlist = $(self);
         var player_id = self.id;
-        var images = [], widths = [], heights = [];
-        var player, stage, controls, play_pause, scrubber, scrubber_handle, image = null;
+        var images = []/*, widths = [], heights = []*/;
+        var player, stage, controls, play_pause, scrubber, scrubber_handle, frame_count, image = null;
+        var last_frame_scrubber_pos = 0;
         var inc; // delta inc for scrubber
         var i = 0; // current image
         var rotator = null;
         var settings = options;
         playlist.find('img').each(function() {
             images.push(this.src);
-            widths.push($(this).width());
-            heights.push($(this).height());
+            //widths.push($(this).width());
+            //heights.push($(this).height());
         });
         
         create_player();
@@ -41,6 +42,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             play_pause      = $('<a>').attr('href', '#');
             scrubber        = $('<div>').addClass('scrubber');
             scrubber_handle = $('<a>').attr('href', '#');
+            frame_count     = $('<span>').addClass('frame_count');
             // Set dimensions
             player.css({
                 width:settings.stageWidth + 'px',
@@ -54,7 +56,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 width:settings.stageWidth + 'px'
             });
             scrubber.css({
-                width:settings.stageWidth - 50 + 'px'
+                width:settings.stageWidth - 100 + 'px'
             });
             // Set the right control for play/pause.
             (settings.autoStart===true) ? play_pause.addClass('pause') : play_pause.addClass('play');
@@ -71,9 +73,25 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 handle_scrubber_click(e, this);
             });
             // Build the player.
-            player.append(stage).append(controls.append(play_pause).append(scrubber.append(scrubber_handle)));         
+            player.append(stage).append(controls.append(play_pause).append(scrubber.append(scrubber_handle)).append(frame_count));         
             playlist.hide().after(player);
             inc = Math.floor(scrubber.width() / images.length);
+        }
+        
+        function set_image(img) {
+            var image_object = {
+                src: img, 
+                alt: 'Slide ' + i + 1, 
+                width: settings.stageWidth, 
+                height: settings.stageHeight
+            };
+            if (image === null) {
+                image = $('<img>').attr(image_object);
+                stage.html(image);
+            } else {
+                image.attr(image_object);      
+            }
+            frame_count.html(i+1 + '/' + images.length);
         }
         
         function image_cycle() {
@@ -87,9 +105,6 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                     scrubber_handle.stop(true, true);
                     scrubber_handle.css('left', '0');
                 }
-            } else {
-            // clearTimeout
-            // stop animation
             }
             if (i < images.length) {
                 image_transition(images[i]);
@@ -98,25 +113,10 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         }
         
         function image_transition(img) {
-            var image_object = { src: img, alt: 'Slide ' + i + 1 };
-            if (image === null) {
-                image = $('<img>').attr(image_object);
-                stage.html(image);
-            } else {
-                image.attr(image_object);         
-            }
-            if(image.width() != settings.stageWidth &&
-                image.height() != settings.stageHeight) { // adjust w&h
-                image.css({
-                    width: settings.stageWidth,
-                    height: settings.stageHeight
-                }).attr({
-                    width: settings.stageWidth,
-                    height: settings.stageHeight
-                });
-            }
+            set_image(img);
             // animate scrubber
-            var remaining = inc*(i+1) - parseFloat(scrubber_handle.css('left'));
+            last_frame_scrubber_pos = parseFloat(scrubber_handle.css('left'));
+            var remaining = inc*(i+1) - last_frame_scrubber_pos;
             var percent = Math.floor(remaining / inc);
             scrubber_handle.stop(true, true);
             scrubber_handle.animate({
@@ -126,44 +126,65 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         }
         
         function handle_image_hover(e, elem) {
-            
+            if(settings.pauseOnHover === true && play_pause.attr('class') === 'pause') { // is playing
+                clearTimeout(rotator);
+                scrubber_handle.stop(true, true);  
+            }
         }
         
         function handle_image_out(e, elem) {
-            
+            if(settings.pauseOnHover === true && play_pause.attr('class') === 'pause') {   
+                image_cycle();
+            }
         }
         
         function handle_control_click(e, elem) {
             e.preventDefault();
             elem = $(elem, player);
-            console.log(elem);
-            // see if we can use "hasClass"
-            if(elem.attr('class') == 'play') { // play (then pause)
-                elem.attr('class', 'pause');
-            } else { // pause (resume play)
-                image_cycle();
+            // try if we can use "hasClass"
+            if(elem.attr('class') == 'pause') { // it's playing (then pause)
                 elem.attr('class', 'play');
-            // clearTimeout
-            // ...
+                clearTimeout(rotator);
+                scrubber_handle.stop(true, false);
+                scrubber_handle.css('left', last_frame_scrubber_pos + 'px');
+                i--;
+            } else { // paused (we have to resume playback)
+                image_cycle();
+                elem.attr('class', 'pause');
             }
         }
         
         function handle_scrubber_click(e, elem) {
+            var pos, x_coord;
+            e.preventDefault();
+            elem = $(elem, player);
+            clearTimeout(rotator);
+            scrubber_handle.stop(true, false);
+            pos = elem.offset();
+            x_coord = Math.ceil(e.pageX - pos.left);
+            i = Math.floor(x_coord / inc);
+            if(Math.abs(inc*i - x_coord) <= Math.abs(inc*(i+1) - x_coord)) {
+                scrubber_handle.css('left', (x_coord - Math.abs(inc*i - x_coord)) + 'px');
+            } else {
+                scrubber_handle.css('left', (x_coord + Math.abs(inc*(i+1) - x_coord)) + 'px');
+                if(i < images.length - 1) i++;
+            }
+            if(play_pause.attr('class') === 'pause') { // was playing
+                image_cycle();
+            } else {
+                set_image(images[i]);
+            }
             
         }
         
-        // Debug
-        console.log(playlist);
-        console.log(player_id);
     };
     
     $.imagePlayer.settings = {
         stageWidth:400,
         stageHeight:300,
-        autoStart:true,
+        autoStart:false,
         pauseOnHover:true,
         delay:1,
-        transition:0, // can be 'slow', 'fast' or time in ms. TODO: REMOVE TRANSITION SUPPORT
         loop:true
     };
     
