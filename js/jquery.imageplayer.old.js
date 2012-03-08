@@ -1,7 +1,4 @@
-if (typeof(jQuery) == 'undefined')
-{
-	alert('jquery library was not found.');
-}
+
 (function($) {
     $.fn.imagePlayer = function(options) {
     

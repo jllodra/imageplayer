@@ -13,15 +13,15 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         } 
     });
     
-    $.imagePlayer = function (self, arg) {
+    $.imagePlayer = function (self, options) {
         var playlist = $(self);
         var player_id = self.id;
         var images = [], widths = [], heights = [];
-        var player, stage, controls, play_pause, scrubber, scrubber_handle;
+        var player, stage, controls, play_pause, scrubber, scrubber_handle, image = null;
         var inc; // delta inc for scrubber
         var i = 0; // current image
         var rotator = null;
-        var settings = $.imagePlayer.settings;
+        var settings = options;
         playlist.find('img').each(function() {
             images.push(this.src);
             widths.push($(this).width());
@@ -77,11 +77,14 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         }
         
         function image_cycle() {
+            console.log(i);
             clearTimeout(rotator);
             if(settings.loop === true) {
                 if (i > images.length - 1) {
                     i = 0;
                     // stop animation
+                    console.log("I'm here");
+                    scrubber_handle.stop(true, true);
                     scrubber_handle.css('left', '0');
                 }
             } else {
@@ -95,18 +98,30 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         }
         
         function image_transition(img) {
-            var image = $('<img>').attr({ // Image object.
-                src: img,
-                alt:'Slide ' + i + 1
-            });
-            stage.html(image);
-            image.css({
-                width: settings.stageWidth, 
-                height: settings.stageHeight
-            }).attr({
-                width: settings.stageWidth, 
-                height: settings.stageHeight
-            });
+            var image_object = { src: img, alt: 'Slide ' + i + 1 };
+            if (image === null) {
+                image = $('<img>').attr(image_object);
+                stage.html(image);
+            } else {
+                image.attr(image_object);         
+            }
+            if(image.width() != settings.stageWidth &&
+                image.height() != settings.stageHeight) { // adjust w&h
+                image.css({
+                    width: settings.stageWidth,
+                    height: settings.stageHeight
+                }).attr({
+                    width: settings.stageWidth,
+                    height: settings.stageHeight
+                });
+            }
+            // animate scrubber
+            var remaining = inc*(i+1) - parseFloat(scrubber_handle.css('left'));
+            var percent = Math.floor(remaining / inc);
+            scrubber_handle.stop(true, true);
+            scrubber_handle.animate({
+                left: '+='+remaining+'px'
+            }, settings.delay*1000, 'linear');
             rotator = setTimeout(image_cycle, settings.delay * 1000);
         }
         
