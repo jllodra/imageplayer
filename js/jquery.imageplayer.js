@@ -21,7 +21,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         var playlist = $(self);
         var player_id = self.id;
         var images = [];
-        var player, stage, controls, start, play_pause, end, scrubber, scrubber_handle, frame_count, image = null;
+        var player, stage, controls, start, play_pause, end, scrubber, scrubber_handle, fullscreen, frame_count, image = null;
         var last_frame_scrubber_pos = 0;
         var inc; // delta inc for scrubber
         var i = 0; // current image
@@ -52,6 +52,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             end             = $('<a>').attr('href', '#').addClass('end');
             scrubber        = $('<div>').addClass('scrubber');
             scrubber_handle = $('<a>').attr('href', '#');
+            fullscreen      = $('<a>').attr('href', '#').addClass('fullscreen');
             frame_count     = $('<span>').addClass('frame_count');
             // Set dimensions
             player.css({
@@ -66,7 +67,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 width:settings.stageWidth + 'px'
             });
             scrubber.css({
-                width:settings.stageWidth - 180 + 'px'
+                width:settings.stageWidth - 217 + 'px'
             });
             // Set the right control for play/pause.
             (settings.autoStart===true) ? play_pause.addClass('pause') : play_pause.addClass('play');
@@ -85,11 +86,14 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             end.bind('click', function(e) {
                 handle_end_click(e, this);
             });
+            fullscreen.bind('click', function(e) {
+                handle_fullscreen_click(e, this);
+            });
             scrubber.bind('click', function(e) {
                 handle_scrubber_click(e, this);
             });
             // Build the player.
-            player.append(stage).append(controls.append(start).append(play_pause).append(end).append(scrubber.append(scrubber_handle)).append(frame_count));         
+            player.append(stage).append(controls.append(start).append(play_pause).append(end).append(scrubber.append(scrubber_handle)).append(fullscreen).append(frame_count));         
             playlist.hide().after(player);
             inc = Math.floor(scrubber.width() / images.length);
         }
@@ -194,6 +198,11 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             } else {
                 set_image(images[i]);
             }
+        }
+        
+        function handle_fullscreen_click(e, elem) {
+            console.log("switch fullscreen");
+            e.preventDefault();
         }
         
         function handle_scrubber_click(e, elem) {

@@ -40,6 +40,7 @@
 .img_player a.pause { background:url(../images/player.png) 0 -40px no-repeat; }
 .img_player a.start { background:url(../images/player.png) 0 -212px no-repeat; }
 .img_player a.end   { background:url(../images/player.png) 0 -172px no-repeat; }
+.img_player a.fullscreen { background:url(../images/player.png) 0 -252px no-repeat; }
 
 .img_player .scrubber {
     float:left;
