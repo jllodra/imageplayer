@@ -8,7 +8,11 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 options = $.extend({}, $.imagePlayer.settings, options);
             }
             return this.each(function() {
-                new $.imagePlayer(this, options);
+                try {
+                    new $.imagePlayer(this, options);
+                } catch (e) {
+                    console.error(e);
+                }
             });
         } 
     });
@@ -16,7 +20,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
     $.imagePlayer = function (self, options) {
         var playlist = $(self);
         var player_id = self.id;
-        var images = []/*, widths = [], heights = []*/;
+        var images = [];
         var player, stage, controls, start, play_pause, end, scrubber, scrubber_handle, frame_count, image = null;
         var last_frame_scrubber_pos = 0;
         var inc; // delta inc for scrubber
@@ -25,13 +29,17 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         var settings = options;
         playlist.find('img').each(function() {
             images.push(this.src);
-            //widths.push($(this).width());
-            //heights.push($(this).height());
         });
+        
+        if(images.length == 0) {
+            throw "No images found!";
+        }
         
         create_player();
         if(settings.autoStart === true) {
             image_cycle();
+        } else {
+            set_image(images[0]);
         }
 
         function create_player() {
@@ -189,7 +197,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         }
         
         function handle_scrubber_click(e, elem) {
-            var pos, x_coord;
+            var pos, x_coord, delta_p, delta_n;
             e.preventDefault();
             elem = $(elem, player);
             clearTimeout(rotator);
@@ -197,10 +205,12 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             pos = elem.offset();
             x_coord = Math.ceil(e.pageX - pos.left);
             i = Math.floor(x_coord / inc);
-            if(Math.abs(inc*i - x_coord) <= Math.abs(inc*(i+1) - x_coord)) {
-                scrubber_handle.css('left', (x_coord - Math.abs(inc*i - x_coord)) + 'px');
+            delta_p = Math.abs(inc*i - x_coord);
+            delta_n = Math.abs(inc*(i+1) - x_coord);
+            if(delta_p <= delta_n) {
+                scrubber_handle.css('left', (x_coord - delta_p) + 'px');
             } else {
-                scrubber_handle.css('left', (x_coord + Math.abs(inc*(i+1) - x_coord)) + 'px');
+                scrubber_handle.css('left', (x_coord + delta_n) + 'px');
                 if(i < images.length - 1) i++;
             }
             if(play_pause.attr('class') === 'pause') { // was playing
