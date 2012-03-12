@@ -29,6 +29,13 @@
     text-align:center;
 }
 
+/*
+img_player .stage img {
+    image-rendering: optimizeQuality;
+    -ms-interpolation-mode: bicubic;
+}
+*/
+
 .img_player .controls {
     height:40px;
     background:url(../images/player.png) 0 -120px repeat-x;

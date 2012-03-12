@@ -18,16 +18,17 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
     });
     
     $.imagePlayer = function (self, options) {
+        var settings = options;
         var playlist = $(self);
         //var player_id = self.id;
         var images = [];
         var player, stage, controls, start, play_pause, end, scrubber, scrubber_handle, fullscreen, frame_count, image = null;
         var last_frame_scrubber_pos = 0;
-        var fullscreen = false;
+        var full = false;
+        var pauseOnHover = settings.pauseOnHover;
         var inc; // delta inc for scrubber
         var i = 0; // current image
         var rotator = null;
-        var settings = options;
         playlist.find('img').each(function() {
             images.push(this.src);
         });
@@ -100,8 +101,8 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         }
         
         function set_image(img) {
-            var w = (fullscreen === true) ? window.innerWidth : settings.stageWidth;
-            var h = (fullscreen === true) ? window.innerHeight : settings.stageHeight;
+            var w = (full === true) ? window.innerWidth : settings.stageWidth;
+            var h = (full === true) ? window.innerHeight - 120 : settings.stageHeight;
             var image_object = {
                 src: img, 
                 alt: 'Slide ' + i + 1, 
@@ -147,14 +148,14 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         }
         
         function handle_image_hover(e, elem) {
-            if(settings.pauseOnHover === true && play_pause.attr('class') === 'pause') { // is playing
+            if(pauseOnHover === true && play_pause.attr('class') === 'pause') { // is playing
                 clearTimeout(rotator);
                 scrubber_handle.stop(true, true);  
             }
         }
         
         function handle_image_out(e, elem) {
-            if(settings.pauseOnHover === true && play_pause.attr('class') === 'pause') {   
+            if(pauseOnHover === true && play_pause.attr('class') === 'pause') {   
                 image_cycle();
             }
         }
@@ -207,7 +208,8 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             console.log("switch fullscreen");
             e.preventDefault();
             if(!player.hasClass('full')) {
-                fullscreen = true;
+                full = true;
+                pauseOnHover = false; // while we are in fullscreen
                 // enter fullscreen
                 player.addClass('full');
                 player.css('width', window.innerWidth + 'px');
@@ -215,9 +217,10 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 stage.css('width', window.innerWidth + 'px');
                 stage.css('height', (window.innerHeight - 80) + 'px');
                 image.attr('width', window.innerWidth);
-                image.attr('height', window.innerHeight);
+                image.attr('height', window.innerHeight - 120);
             } else {
-                fullscreen = false;
+                full = false;
+                pauseOnHover = settings.pauseOnHover; // restore
                 // exit fullscreen
                 player.removeClass('full');
                 player.css({

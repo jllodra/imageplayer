@@ -228,7 +228,7 @@
             // Decide which frame is nearer
             var delta_c = Math.abs(inc*i - x_coord);
             var delta_n = Math.abs(inc*(i+1) - x_coord);
-            if(delta_c <= delta_n) { 
+            if(delta_c <= delta_n) {
                 scrubber_handle.css('left', (x_coord - delta_c) + 'px');
             } else {
                 scrubber_handle.css('left', (x_coord + delta_n) + 'px');
