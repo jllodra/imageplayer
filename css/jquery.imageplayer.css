@@ -1,7 +1,7 @@
 .img_player {
     background:#333;
     border:1px solid #000;
-    padding:10px 10px 0 10px;
+    padding:10px 10px 0px 10px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -9,7 +9,7 @@
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
-    margin: 0 auto;
+    text-align: center;
 }
 
 .img_player.full {
@@ -42,8 +42,6 @@ img_player .stage img {
     background:url(../images/player.png) 0 -120px repeat-x;
     overflow:hidden;
     border-radius: 0px 0px 15px 15px;
-    text-align: center;
-    margin: 0 auto;
 }
 
 .img_player .controls a {

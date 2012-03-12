@@ -59,7 +59,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             // Set dimensions
             player.css({
                 width:settings.stageWidth + 'px',
-                height:settings.stageHeight + 50 + 'px'
+                height:settings.stageHeight + 100 + 'px'
             });
             stage.css({
                 width:settings.stageWidth + 'px',
@@ -101,8 +101,8 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         }
         
         function set_image(img) {
-            var w = (full === true) ? window.innerWidth : settings.stageWidth;
-            var h = (full === true) ? window.innerHeight - 80 : settings.stageHeight;
+            var w = (full === true) ? $(window).innerWidth() : settings.stageWidth;
+            var h = (full === true) ? $(window).innerHeight() - 40 : settings.stageHeight;
             var image_object = {
                 src: img, 
                 alt: 'Slide ' + i + 1, 
@@ -212,12 +212,12 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 pauseOnHover = false; // while we are in fullscreen
                 // enter fullscreen
                 player.addClass('full');
-                player.css('width', window.innerWidth + 'px');
-                player.css('height', (window.innerHeight - 40) + 'px');
-                stage.css('width', window.innerWidth + 'px');
-                stage.css('height', (window.innerHeight - 80) + 'px');
-                image.attr('width', window.innerWidth);
-                image.attr('height', window.innerHeight - 80);
+                player.css('width', $(window).innerWidth() + 'px');
+                player.css('height', ($(window).innerHeight()) + 'px');
+                stage.css('width', $(window).innerWidth() + 'px');
+                stage.css('height', ($(window).innerHeight() - 40) + 'px');
+                image.attr('width', $(window).innerWidth());
+                image.attr('height', $(window).innerHeight() - 40);
             } else {
                 full = false;
                 pauseOnHover = settings.pauseOnHover; // restore
