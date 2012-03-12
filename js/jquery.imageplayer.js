@@ -102,7 +102,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         
         function set_image(img) {
             var w = (full === true) ? window.innerWidth : settings.stageWidth;
-            var h = (full === true) ? window.innerHeight - 120 : settings.stageHeight;
+            var h = (full === true) ? window.innerHeight - 80 : settings.stageHeight;
             var image_object = {
                 src: img, 
                 alt: 'Slide ' + i + 1, 
@@ -217,7 +217,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 stage.css('width', window.innerWidth + 'px');
                 stage.css('height', (window.innerHeight - 80) + 'px');
                 image.attr('width', window.innerWidth);
-                image.attr('height', window.innerHeight - 120);
+                image.attr('height', window.innerHeight - 80);
             } else {
                 full = false;
                 pauseOnHover = settings.pauseOnHover; // restore
