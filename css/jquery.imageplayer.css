@@ -9,6 +9,17 @@
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    margin: 0 auto;
+}
+
+.img_player.full {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    overflow: hidden;
 }
 
 .img_player .stage {
@@ -20,10 +31,11 @@
 
 .img_player .controls {
     height:40px;
-    margin-top:10px;
     background:url(../images/player.png) 0 -120px repeat-x;
     overflow:hidden;
     border-radius: 0px 0px 15px 15px;
+    text-align: center;
+    margin: 0 auto;
 }
 
 .img_player .controls a {

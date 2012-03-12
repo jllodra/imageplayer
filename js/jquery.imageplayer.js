@@ -19,10 +19,11 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
     
     $.imagePlayer = function (self, options) {
         var playlist = $(self);
-        var player_id = self.id;
+        //var player_id = self.id;
         var images = [];
         var player, stage, controls, start, play_pause, end, scrubber, scrubber_handle, fullscreen, frame_count, image = null;
         var last_frame_scrubber_pos = 0;
+        var fullscreen = false;
         var inc; // delta inc for scrubber
         var i = 0; // current image
         var rotator = null;
@@ -99,17 +100,19 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         }
         
         function set_image(img) {
+            var w = (fullscreen === true) ? window.innerWidth : settings.stageWidth;
+            var h = (fullscreen === true) ? window.innerHeight : settings.stageHeight;
             var image_object = {
                 src: img, 
                 alt: 'Slide ' + i + 1, 
-                width: settings.stageWidth, 
-                height: settings.stageHeight
+                width: w, 
+                height: h
             };
             if (image === null) {
                 image = $('<img>').attr(image_object);
                 stage.html(image);
             } else {
-                image.attr(image_object);      
+                image.attr(image_object);
             }
             frame_count.html(i+1 + '/' + images.length);
         }
@@ -135,7 +138,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             // animate scrubber
             last_frame_scrubber_pos = parseFloat(scrubber_handle.css('left'));
             var remaining = inc*(i+1) - last_frame_scrubber_pos;
-            var percent = Math.floor(remaining / inc);
+            // var percent = Math.floor(remaining / inc);
             scrubber_handle.stop(true, true);
             scrubber_handle.animate({
                 left: '+='+remaining+'px'
@@ -203,6 +206,31 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         function handle_fullscreen_click(e, elem) {
             console.log("switch fullscreen");
             e.preventDefault();
+            if(!player.hasClass('full')) {
+                fullscreen = true;
+                // enter fullscreen
+                player.addClass('full');
+                player.css('width', window.innerWidth + 'px');
+                player.css('height', (window.innerHeight - 40) + 'px');
+                stage.css('width', window.innerWidth + 'px');
+                stage.css('height', (window.innerHeight - 80) + 'px');
+                image.attr('width', window.innerWidth);
+                image.attr('height', window.innerHeight);
+            } else {
+                fullscreen = false;
+                // exit fullscreen
+                player.removeClass('full');
+                player.css({
+                    width:settings.stageWidth + 'px',
+                    height:settings.stageHeight + 50 + 'px'
+                });
+                stage.css({
+                    width:settings.stageWidth + 'px',
+                    height:settings.stageHeight + 'px'
+                });
+                image.attr('width', settings.stageWidth);
+                image.attr('height', settings.stageHeight);
+            } 
         }
         
         function handle_scrubber_click(e, elem) {
