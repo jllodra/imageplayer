@@ -1,7 +1,7 @@
 .img_player {
     background:#333;
     border:1px solid #000;
-    padding:10px 10px 0px 10px;
+    padding:10px 10px 10px 10px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -24,7 +24,7 @@
 }
 
 .img_player .stage {
-    margin:0 auto 0 auto;
+    margin: 0 auto 0 auto;
     background:#333;
     overflow:hidden;
     text-align:center;
@@ -38,6 +38,7 @@ img_player .stage img {
 */
 
 .img_player .controls {
+	 margin: 0 auto;
     height:40px;
     background:url(../images/player.png) 0 -120px repeat-x;
     overflow:hidden;

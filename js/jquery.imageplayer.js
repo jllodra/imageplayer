@@ -59,7 +59,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             // Set dimensions
             player.css({
                 width:settings.stageWidth + 'px',
-                height:settings.stageHeight + 100 + 'px'
+                height:settings.stageHeight + 40 + 'px' // 40 is control bar height
             });
             stage.css({
                 width:settings.stageWidth + 'px',
@@ -225,7 +225,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 player.removeClass('full');
                 player.css({
                     width:settings.stageWidth + 'px',
-                    height:settings.stageHeight + 50 + 'px'
+                    height:settings.stageHeight + 40 + 'px'
                 });
                 stage.css({
                     width:settings.stageWidth + 'px',
