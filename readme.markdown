@@ -10,6 +10,8 @@ Images are scaled automatically to fit in the player. You can also switch to ful
 
 Works perfectly in chrome/safari/firefox, and not that perfect for IE yet. 
 
+<a href="http://jllodra.github.com/imageplayer/">Project page</a>
+
 <img src="http://jllodra.github.com/assets/imageplayer.png" width="480" alt="jquery ip snap" />
 
 Example:
