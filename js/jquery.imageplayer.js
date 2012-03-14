@@ -6,7 +6,9 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         imagePlayer: function(options) {
             if (options && typeof(options) == 'object') {
                 options = $.extend({}, $.imagePlayer.settings, options);
-            }
+            } else {
+			   	 options = $imagePlayer.settings;
+				}
             return this.each(function() {
                 try {
                     new $.imagePlayer(this, options);
