@@ -22,7 +22,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         var playlist = $(self);
         //var player_id = self.id;
         var images = [];
-        var player, stage, controls, start, play_pause, end, scrubber, scrubber_handle, fullscreen, frame_count, image = null;
+        var player, stage, controls, start, prev, play_pause, next, end, scrubber, scrubber_handle, fullscreen, frame_count, image = null;
         var last_frame_scrubber_pos = 0;
         var full = false;
         var pauseOnHover = settings.pauseOnHover;
@@ -50,8 +50,10 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             stage           = $('<div>').addClass('stage');
             controls        = $('<div>').addClass('controls');
             start           = $('<a>').attr('href', '#').addClass('start');
-            play_pause      = $('<a>').attr('href', '#');
-            end             = $('<a>').attr('href', '#').addClass('end');
+            prev            = $('<a>').attr('href', '#').addClass('prev');            
+				play_pause      = $('<a>').attr('href', '#');
+            next            = $('<a>').attr('href', '#').addClass('next');
+				end             = $('<a>').attr('href', '#').addClass('end');
             scrubber        = $('<div>').addClass('scrubber');
             scrubber_handle = $('<a>').attr('href', '#');
             fullscreen      = $('<a>').attr('href', '#').addClass('fullscreen');
@@ -69,7 +71,8 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 width:settings.stageWidth + 'px'
             });
             scrubber.css({
-                width:settings.stageWidth - 217 + 'px'
+                //width:settings.stageWidth - 297 + 'px'
+				    width: Math.floor((settings.stageWidth - 297) / images.length)*(images.length + 1) + 'px'
             });
             // Set the right control for play/pause.
             (settings.autoStart===true) ? play_pause.addClass('pause') : play_pause.addClass('play');
@@ -81,6 +84,12 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             }); // .hover seems not tow work?
             play_pause.bind('click', function(e) {
                 handle_control_click(e, this);
+            });
+            prev.bind('click', function(e) {
+                handle_prev_click(e, this);
+            });
+            next.bind('click', function(e) {
+                handle_next_click(e, this);
             });
             start.bind('click', function(e) {
                 handle_start_click(e, this);
@@ -95,7 +104,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 handle_scrubber_click(e, this);
             });
             // Build the player.
-            player.append(stage).append(controls.append(start).append(play_pause).append(end).append(scrubber.append(scrubber_handle)).append(fullscreen).append(frame_count));         
+            player.append(stage).append(controls.append(start).append(prev).append(play_pause).append(next).append(end).append(scrubber.append(scrubber_handle)).append(fullscreen).append(frame_count));         
             playlist.hide().after(player);
             inc = Math.floor(scrubber.width() / images.length);
         }
@@ -175,7 +184,37 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 elem.attr('class', 'pause');
             }
         }
-        
+
+		  // TODO: prev/next/start/end have a lot in common
+
+        function handle_prev_click(e, elem) {
+            e.preventDefault();
+            elem = $(elem, player);
+            clearTimeout(rotator);
+            scrubber_handle.stop(true, false);
+				i = (i - 1 < 0) ? 0 : i - 1;
+            scrubber_handle.css('left', inc*i + 'px');
+            if(play_pause.attr('class') === 'pause') { // was playing
+                image_cycle();
+            } else {
+                set_image(images[i]);
+            }
+        }
+
+        function handle_next_click(e, elem) {
+            e.preventDefault();
+            elem = $(elem, player);
+            clearTimeout(rotator);
+            scrubber_handle.stop(true, false);
+				i = (i + 1 > images.length - 1) ? images.length - 1 : i + 1;
+            scrubber_handle.css('left', inc*i + 'px');
+            if(play_pause.attr('class') === 'pause') { // was playing
+                image_cycle();
+            } else {
+                set_image(images[i]);
+            }
+        }
+  
         function handle_start_click(e, elem) {
             e.preventDefault();
             elem = $(elem, player);
@@ -196,7 +235,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             clearTimeout(rotator);
             scrubber_handle.stop(true, false);
             i = images.length - 1;
-            scrubber_handle.css('left', (i+1)*inc + 'px');
+            scrubber_handle.css('left', i*inc + 'px');
             if(play_pause.attr('class') === 'pause') { // was playing
                 image_cycle();
             } else {
@@ -247,18 +286,19 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             i = Math.floor(x_coord / inc);
             delta_p = Math.abs(inc*i - x_coord);
             delta_n = Math.abs(inc*(i+1) - x_coord);
-            if(delta_p <= delta_n) {
-                scrubber_handle.css('left', (x_coord - delta_p) + 'px');
-            } else {
-                scrubber_handle.css('left', (x_coord + delta_n) + 'px');
-                if(i < images.length - 1) i++;
-            }
-            if(play_pause.attr('class') === 'pause') { // was playing
-                image_cycle();
-            } else {
-                set_image(images[i]);
-            }
-            
+				if(i < images.length) {
+               if(delta_p <= delta_n) {
+                	scrubber_handle.css('left', (x_coord - delta_p) + 'px');
+            	} else {
+                	scrubber_handle.css('left', (x_coord + delta_n) + 'px');
+                	if(i < images.length - 1) i++;
+            	}
+            	if(play_pause.attr('class') === 'pause') { // was playing
+                	image_cycle();
+            	} else {
+                	set_image(images[i]);
+            	}
+				}
         }
         
     };
