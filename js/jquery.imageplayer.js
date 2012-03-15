@@ -23,6 +23,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         var settings = options;
         var playlist = $(self);
         var images = [];
+        var body = null;
         var player, stage, controls, start, prev, play_pause, next, end, scrubber, scrubber_handle, fullscreen, frame_count, image = null;
         var last_frame_scrubber_pos = 0;
         var full = false;
@@ -245,7 +246,6 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         }
         
         function handle_fullscreen_click(e, elem) {
-            console.log("switch fullscreen");
             e.preventDefault();
             if(!player.hasClass('full')) {
                 full = true;
@@ -258,6 +258,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 stage.css('height', ($(window).innerHeight() - 40) + 'px');
                 image.attr('width', $(window).innerWidth());
                 image.attr('height', $(window).innerHeight() - 40);
+                $(player).siblings().filter(':visible').addClass('invisibleimageplayer');
             } else {
                 full = false;
                 pauseOnHover = settings.pauseOnHover; // restore
@@ -273,6 +274,8 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 });
                 image.attr('width', settings.stageWidth);
                 image.attr('height', settings.stageHeight);
+                $(player).siblings().removeClass('invisibleimageplayer');
+                $('body').scrollTop(player.offset().top);
             } 
         }
         
