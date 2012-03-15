@@ -8,7 +8,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 options = $.extend({}, $.imagePlayer.settings, options);
             } else {
 			   	 options = $.imagePlayer.settings;
-				}
+			}
             return this.each(function() {
                 try {
                     new $.imagePlayer(this, options);
@@ -22,7 +22,6 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
     $.imagePlayer = function (self, options) {
         var settings = options;
         var playlist = $(self);
-        //var player_id = self.id;
         var images = [];
         var player, stage, controls, start, prev, play_pause, next, end, scrubber, scrubber_handle, fullscreen, frame_count, image = null;
         var last_frame_scrubber_pos = 0;
@@ -53,9 +52,9 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             controls        = $('<div>').addClass('controls');
             start           = $('<a>').attr('href', '#').addClass('start');
             prev            = $('<a>').attr('href', '#').addClass('prev');            
-				play_pause      = $('<a>').attr('href', '#');
+			play_pause      = $('<a>').attr('href', '#');
             next            = $('<a>').attr('href', '#').addClass('next');
-				end             = $('<a>').attr('href', '#').addClass('end');
+			end             = $('<a>').attr('href', '#').addClass('end');
             scrubber        = $('<div>').addClass('scrubber');
             scrubber_handle = $('<a>').attr('href', '#');
             fullscreen      = $('<a>').attr('href', '#').addClass('fullscreen');
@@ -194,7 +193,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             elem = $(elem, player);
             clearTimeout(rotator);
             scrubber_handle.stop(true, false);
-				i = (i - 1 < 0) ? 0 : i - 1;
+			i = (i - 1 < 0) ? 0 : i - 1;
             scrubber_handle.css('left', inc*i + 'px');
             if(play_pause.attr('class') === 'pause') { // was playing
                 image_cycle();
@@ -208,7 +207,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             elem = $(elem, player);
             clearTimeout(rotator);
             scrubber_handle.stop(true, false);
-				i = (i + 1 > images.length - 1) ? images.length - 1 : i + 1;
+			i = (i + 1 > images.length - 1) ? images.length - 1 : i + 1;
             scrubber_handle.css('left', inc*i + 'px');
             if(play_pause.attr('class') === 'pause') { // was playing
                 image_cycle();
@@ -288,7 +287,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             i = Math.floor(x_coord / inc);
             delta_p = Math.abs(inc*i - x_coord);
             delta_n = Math.abs(inc*(i+1) - x_coord);
-				if(i < images.length) {
+			if(i < images.length) {
                if(delta_p <= delta_n) {
                 	scrubber_handle.css('left', (x_coord - delta_p) + 'px');
             	} else {
@@ -300,7 +299,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             	} else {
                 	set_image(images[i]);
             	}
-				}
+			}
         }
         
     };

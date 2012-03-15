@@ -8,7 +8,7 @@ You can play/pause, go to the beginning, go to the end, click different points o
 and you can enable an option that will pause the playback while hovering over the image. 
 Images are scaled automatically to fit in the player. You can also switch to full-screen.
 
-Works perfectly in chrome/safari/firefox, and not that perfect for IE yet. 
+Works perfectly in chrome/safari/firefox, and pretty well in IE. 
 
 <a href="http://jllodra.github.com/imageplayer/">Project page</a>
 
@@ -28,9 +28,9 @@ Example:
         var options = {
           stageWidth:400,
           stageHeight:300,
-          autoStart:true,
+          autoStart:false,
           pauseOnHover:true,
-          delay:5,
+          delay:1,
           loop:true
         };
         $('#image_player').imagePlayer(options);
