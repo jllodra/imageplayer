@@ -38,8 +38,11 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         if(images.length == 0) {
             throw "No images found!";
         }
-        
+
         create_player();
+        
+        // Check if all images are loaded here. http://api.jquery.com/load-event/
+        
         if(settings.autoStart === true) {
             image_cycle();
         } else {
