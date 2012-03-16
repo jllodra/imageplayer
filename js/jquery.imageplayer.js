@@ -23,6 +23,8 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         var settings = options;
         var playlist = $(self);
         var images = [];
+        var imagesEl = [];
+        var imagesLoaded = 0;
         var body = null;
         var player, stage, controls, start, prev, play_pause, next, end, scrubber, scrubber_handle, fullscreen, frame_count, image = null;
         var last_frame_scrubber_pos = 0;
@@ -33,6 +35,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         var rotator = null;
         playlist.find('img').each(function() {
             images.push(this.src);
+            imagesEl.push(this);
         });
         
         if(images.length == 0) {
@@ -42,12 +45,19 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         create_player();
         
         // Check if all images are loaded here. http://api.jquery.com/load-event/
-        
-        if(settings.autoStart === true) {
-            image_cycle();
-        } else {
-            set_image(images[0]);
-        }
+        $.each(imagesEl, function(index, el) {
+            $(el).load(function() {
+                imagesLoaded++;
+                if(imagesLoaded >= images.length) {
+                    if(settings.autoStart === true) {
+                        image_cycle();
+                    } else {
+                        set_image(images[0]);
+                    }
+                    create_bindings();
+                }
+            });
+        });
 
         function create_player() {
             // Player elements.
@@ -76,11 +86,17 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 width:settings.stageWidth + 'px'
             });
             scrubber.css({
-                //width:settings.stageWidth - 297 + 'px'
-				    width: Math.floor((settings.stageWidth - 297) / images.length)*(images.length + 1) + 'px'
+				width: Math.floor((settings.stageWidth - 297) / images.length)*(images.length + 1) + 'px'
             });
             // Set the right control for play/pause.
             (settings.autoStart===true) ? play_pause.addClass('pause') : play_pause.addClass('play');
+            // Build the player.
+            player.append(stage).append(controls.append(start).append(prev).append(play_pause).append(next).append(end).append(scrubber.append(scrubber_handle)).append(fullscreen).append(frame_count));         
+            playlist.hide().after(player);
+            inc = Math.floor(scrubber.width() / images.length);
+        }
+        
+        function create_bindings() {
             // Bind mouse interactions
             stage.bind('mouseenter', function(e) {
                 handle_image_hover(e, this);
@@ -107,11 +123,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             });
             scrubber.bind('click', function(e) {
                 handle_scrubber_click(e, this);
-            });
-            // Build the player.
-            player.append(stage).append(controls.append(start).append(prev).append(play_pause).append(next).append(end).append(scrubber.append(scrubber_handle)).append(fullscreen).append(frame_count));         
-            playlist.hide().after(player);
-            inc = Math.floor(scrubber.width() / images.length);
+            });            
         }
         
         function set_image(img) {
