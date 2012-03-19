@@ -6,7 +6,7 @@ This is a rewrite of ImagePlayer plug-in originally written by Kelli Shaver.
 It is a player/slideshow that looks and works similarly to a conventional video player. 
 You can play/pause, go to the beginning, go to the end, click different points on the scrubber to jump back and forth, 
 and you can enable an option that will pause the playback while hovering over the image. 
-Images are scaled automatically to fit in the player. You can also switch to full-screen.
+Images are scaled automatically to fit in the player. You can also switch to full-screen. Captions are supported.
 
 Works perfectly in chrome/safari/firefox, and pretty well in IE. 
 
