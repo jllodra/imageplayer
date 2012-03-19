@@ -26,7 +26,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         var imagesEl = [];
         var imagesLoaded = 0;
         var body = null;
-        var player, stage, controls, start, prev, play_pause, next, end, scrubber, scrubber_handle, fullscreen, frame_count, image = null;
+        var player, stage, controls, start, prev, play_pause, next, end, scrubber, scrubber_handle, fullscreen, frame_count, caption, image = null;
         var last_frame_scrubber_pos = 0;
         var full = false;
         var pauseOnHover = settings.pauseOnHover;
@@ -73,6 +73,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             scrubber_handle = $('<a>').attr('href', '#');
             fullscreen      = $('<a>').attr('href', '#').addClass('fullscreen');
             frame_count     = $('<span>').addClass('frame_count');
+            caption         = $('<div>').addClass('caption');
             // Set dimensions
             player.css({
                 width:settings.stageWidth + 'px',
@@ -91,7 +92,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             // Set the right control for play/pause.
             (settings.autoStart===true) ? play_pause.addClass('pause') : play_pause.addClass('play');
             // Build the player.
-            player.append(stage).append(controls.append(start).append(prev).append(play_pause).append(next).append(end).append(scrubber.append(scrubber_handle)).append(fullscreen).append(frame_count));         
+            player.append(stage.append(caption)).append(controls.append(start).append(prev).append(play_pause).append(next).append(end).append(scrubber.append(scrubber_handle)).append(fullscreen).append(frame_count));         
             playlist.hide().after(player);
             inc = Math.floor(scrubber.width() / images.length);
         }
@@ -137,11 +138,17 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             };
             if (image === null) {
                 image = $('<img>').attr(image_object);
-                stage.html(image);
+                stage.append(image);
             } else {
                 image.attr(image_object);
             }
+            set_caption(i+1);
             frame_count.html(i+1 + '/' + images.length);
+        }
+        
+        function set_caption(frame) {
+            if (settings.captions === null || !(frame in settings.captions)) return;
+            caption.html(settings.captions[frame]);
         }
         
         function image_cycle() {
@@ -328,7 +335,8 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
         autoStart:false,
         pauseOnHover:true,
         delay:1,
-        loop:true
+        loop:true,
+        captions: null
     };
     
 })(jQuery);
