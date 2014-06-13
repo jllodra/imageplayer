@@ -37,6 +37,9 @@ Example:
       });
     </script>
 
+License:
+--------
+
 Copyright 2013 Josep Llodrà Grimalt
 
    Licensed under the Apache License, Version 2.0 (the "License");
