@@ -66,9 +66,9 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
             controls        = $('<div>').addClass('controls');
             start           = $('<a>').attr('href', '#').addClass('start');
             prev            = $('<a>').attr('href', '#').addClass('prev');            
-			play_pause      = $('<a>').attr('href', '#');
+            play_pause      = $('<a>').attr('href', '#');
             next            = $('<a>').attr('href', '#').addClass('next');
-			end             = $('<a>').attr('href', '#').addClass('end');
+            end             = $('<a>').attr('href', '#').addClass('end');
             scrubber        = $('<div>').addClass('scrubber');
             scrubber_handle = $('<a>').attr('href', '#');
             fullscreen      = $('<a>').attr('href', '#').addClass('fullscreen');
@@ -87,7 +87,7 @@ if (typeof(jQuery) == 'undefined') alert('jQuery library was not found.');
                 width:settings.stageWidth + 'px'
             });
             scrubber.css({
-				width: Math.floor((settings.stageWidth - 297) / images.length)*(images.length + 1) + 'px'
+                width: Math.floor(((settings.stageWidth - 297) / images.length)*(images.length + 1)) + 'px'
             });
             // Set the right control for play/pause.
             (settings.autoStart===true) ? play_pause.addClass('pause') : play_pause.addClass('play');
